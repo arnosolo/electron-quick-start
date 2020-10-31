@@ -1,22 +1,65 @@
 {
-  "name": "electron-quick-start",
+  "name": "ios_clipboard_to_desktop",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "copy ios clipboard to desktop",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "clipboard",
+    "ios",
+    "airdrop"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Arno",
+  "license": "",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "electron": "^10.1.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "clipboardy": "^2.3.0",
+    "ejs": "^3.1.5",
+    "electron-squirrel-startup": "^1.0.0",
+    "express": "^4.17.1",
+    "formidable": "^1.2.2",
+    "http-server": "^0.12.3",
+    
+    "jade": "^1.11.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "electron_quick_start"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

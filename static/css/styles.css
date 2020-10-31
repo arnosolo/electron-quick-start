@@ -1,0 +1,17 @@
+.qrcode {
+    width: 10rem;
+    height: 10rem;
+    /* background-color: blanchedalmond; */
+    text-align:center;
+}
+
+.step_img {
+    width: 18rem;
+    /* height: 10rem; */
+    /* background-color: blanchedalmond; */
+    text-align:center;
+}
+
+.center {
+    text-align:center;
+}

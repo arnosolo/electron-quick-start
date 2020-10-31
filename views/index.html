@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>发送文件</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <br>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card text-center"><br>
+          <h2 class="card-title">发文件到电脑</h2>
+          <div class="card-body">
+            <form id="myForm">
+              <div class="form-group">
+                <label for="file_input" class="btn btn-light form-control form-control-lg">
+                  选择文件
+                  <input id="file_input" type="file" multiple style="display: none;"/>
+                </label>
+                <input type="submit" value="提交" class="btn btn-primary form-control form-control-lg"/>
+              </div>
+            </form>
+            <p id="upload_state" class="">等待选择完成</p>
+          </div>
+        </div>
+          
+        <!-- </div>
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+        </div> -->
+      </div>
+    </div>
+    
+
+    <script type="text/javascript" >
+      window.addEventListener("load", function () {
+        // 我们需要获取表单元素
+        var form = document.getElementById("myForm");
+        var fileInput = document.getElementById("file_input")
+        const uploadState = document.getElementById('upload_state')
+        var FD  = new FormData();
+
+        fileInput.addEventListener("change", function (event) {
+          uploadState.innerHTML = '文件已选好,点击提交以上传'
+          console.log(fileInput.files);
+          const data = fileInput.files
+          for(name in data){
+            FD.append(name, data[name]);
+          }
+        });
+
+        // ...然后接管表单的提交事件
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          uploadState.innerHTML = '正在上传...'
+          sendData();
+        });
+
+        function sendData() {
+          var XHR = new XMLHttpRequest();
+
+          // 我们把这个 FormData 和表单元素绑定在一起。
+          // var FD  = new FormData(form);
+
+          // 我们定义了数据成功发送时会发生的事。
+          XHR.addEventListener("load", function(event) {
+            // alert(event.target.responseText);
+            uploadState.innerHTML = event.target.responseText
+          });
+
+          // 我们定义了失败的情形下会发生的事
+          XHR.addEventListener("error", function(event) {
+            alert('哎呀！出了一些问题。');
+          });
+
+          // 我们设置了我们的请求
+          XHR.open("POST", "http://192.168.1.6:4000/upload");
+
+          // 发送的数据是由用户在表单中提供的
+          XHR.send(FD);
+        }
+      
+      });
+      
+    </script>
+  </body>
+</html>

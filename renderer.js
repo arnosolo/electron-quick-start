@@ -1,6 +1,17 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// No Node.js APIs are available in this process because
-// `nodeIntegration` is turned off. Use `preload.js` to
-// selectively enable features needed in the rendering
-// process.
+document.getElementById('adress').innerHTML = getIPAddress()
+
+// 获取局域网地址
+function getIPAddress(){
+    var interfaces = require('os').networkInterfaces();
+    for(var devName in interfaces){
+        var iface = interfaces[devName];
+        for(var i=0;i<iface.length;i++){
+            var alias = iface[i];
+            // console.log(alias);
+            if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' 
+              && !alias.internal && alias.netmask === '255.255.255.0'){
+              return alias.address;
+            }
+        }
+    }
+  }
