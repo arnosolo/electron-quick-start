@@ -2,11 +2,14 @@ const express = require('express');
 const clipboardy = require('clipboardy');
 const bodyParser = require('body-parser');
 const formidable = require("formidable")
-// const images = require("images")
+var logger = require('morgan');
 const fs = require("fs")
 const os = require('os')
 const path = require('path')
 const { Notification, shell, clipboard, nativeImage } = require('electron')
+
+const util = require('./util')
+const userConfig = require('./user_config.json')
 
 // 1.创建express对象
 const app = express();
@@ -15,6 +18,7 @@ const app = express();
 // 在Express 中没有内置获取表单POST请求体的API,使用这个插件使其能够解析POST内容
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(logger('dev'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +45,6 @@ app.post('/msg', function (req, res) {
     notification.show()
     // 提取消息中的网址
     const urlArray = msg.match(/((https?:\/\/)+[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/g);
-    console.log('urlArray:',urlArray);
     // 点击通知打开网页
     notification.on('click' , () => {
       shell.openExternal(urlArray[0])
@@ -53,57 +56,88 @@ app.post('/msg', function (req, res) {
 
 /* 处理发来的文件 */
 app.post('/upload', function (req, res) {
-    // 获取用户信息
-    var { homedir } = os.userInfo()
-    
-    // 解析表单
-    var form = new formidable.IncomingForm();
-    form.parse(req, function(err, fields, files) {
-      if (err) throw err
-    //   console.log(files);
-      for (let key in files) {
-        let file = files[key]
+  // 获取用户信息
+  var { homedir } = os.userInfo()
+  
+  // 解析表单
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    if (err) throw err
+    for (let key in files) {
+      let file = files[key]
+        console.log('Incoming file:', file.name);
         // 过滤空文件
         if (file.size == 0 && file.name == '') continue
 
-        // 保存文件到Pictures文件夹
+        /* 保存文件到Pictures文件夹 */
         const fileName = file.name.split('.')[0]
         const fileType = file.name.split('.')[1]
         const oldPath = file.path
-        const newPath = homedir + '\\Pictures\\' + fileName + '_' + Date.now() + '.' + fileType
-        // fs.rename 是移动文件
-        // fs.rename(oldPath, newPath, (error) => {
-        //     if (error) throw error
-        //     console.log('File received:', file.name);
-        // })
+        let newPath = homedir + '\\Pictures\\'
+        // 如果文件夹不存在，创建
+        util.checkDirExist(newPath)
+        newPath += fileName + '_' + Date.now() + '.' + fileType
+        // 保存文件
         var readStream = fs.createReadStream(oldPath)
         var writeStream = fs.createWriteStream(newPath)
         readStream.pipe(writeStream)
-        
-        // 将图片添加到剪切板
-        const image = nativeImage.createFromPath(file.path)
-        clipboard.writeImage(image)
-        // fs.readFile(file.path, (err, data) => {
-        //   const image = nativeImage.createFromBuffer(data)
-        //   clipboard.writeImage(image)
-        // })
+        let had_error = false
+        readStream.on('error', function(err){
+          if (err) throw err
+          had_error = true;
+        });
+        readStream.on('close', function(){
+          // res.status(500).send({ error: 'Something failed!' })
 
-        // 显示系统通知
-        const notification = new Notification({
-            title: '文件 --> Pictures文件夹',
-            body: `${file.name}`,
-            icon: path.join(__dirname,'./static/img/clipboard.png'),
-        })
-        notification.show()
-        // 点击通知跳转到资源管理器
-        notification.on('click' , () => {
-            shell.showItemInFolder(newPath)
-            console.log('Notification clicked:', file.name)
-        })
-    }
-    
+          /* 保存文件后
+            1. 将图片添加到剪切板
+            2. 发送一条系统通知
+            3. 删除临时文件 */
+          if (!had_error) {
+            console.log('File saved: ', file.name);
+
+            // 将图片添加到剪切板
+            let image = nativeImage.createFromPath(newPath)
+            if(fileType === 'jpeg'){
+              // 将较长边压缩到用户配置的长度
+              const imgClip = nativeImage.createFromBuffer(image.toPNG())
+              const { width, height } = imgClip.getSize()
+              console.log(width, height);
+              if( width > height){
+                image = imgClip.resize({width: 998})
+              }else {
+                image = imgClip.resize({height: 998})
+              }
+            }
+
+            clipboard.writeImage(image)
+
+            // 显示系统通知
+            const notification = new Notification({
+              title: '文件 --> Pictures文件夹',
+              body: `${file.name}`,
+              icon: path.join(__dirname,'./static/img/clipboard.png'),
+            })
+            notification.show()
+            // 点击通知跳转到资源管理器
+            notification.on('click' , () => {
+                shell.showItemInFolder(newPath)
+                console.log('Notification clicked:', file.name)
+            })
+
+            // 删除临时文件
+            fs.unlink(oldPath, (err) => {
+              if (err) throw err
+            }) 
+            
+          }
+        });
+        
+      }
+      
     res.send({code:1, msg:'File transfer success.'})
   })
+  
 });
   
 // 4.开始监听请求

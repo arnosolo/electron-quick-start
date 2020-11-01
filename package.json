@@ -31,9 +31,10 @@
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.17.1",
     "formidable": "^1.2.2",
+    "heic-convert": "^1.2.3",
     "http-server": "^0.12.3",
-    
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "morgan": "^1.10.0"
   },
   "config": {
     "forge": {
