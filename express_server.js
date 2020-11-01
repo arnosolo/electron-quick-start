@@ -98,19 +98,14 @@ app.post('/upload', function (req, res) {
 
             // 将图片添加到剪切板
             let image = nativeImage.createFromPath(newPath)
+            let imgClip = {}
             if(fileType === 'jpeg'){
-              // 将较长边压缩到用户配置的长度
-              const imgClip = nativeImage.createFromBuffer(image.toPNG())
-              const { width, height } = imgClip.getSize()
-              console.log(width, height);
-              if( width > height){
-                image = imgClip.resize({width: 998})
-              }else {
-                image = imgClip.resize({height: 998})
-              }
+              imgClip = image.resize({width: userConfig.imgClipSize*1})
+            }else {
+              imgClip = image
             }
 
-            clipboard.writeImage(image)
+            clipboard.writeImage(imgClip)
 
             // 显示系统通知
             const notification = new Notification({
