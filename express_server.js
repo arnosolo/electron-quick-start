@@ -10,9 +10,18 @@ const { Notification, shell, clipboard, nativeImage } = require('electron')
 
 const util = require('./util')
 const userConfig = require('./user_config.json')
+const Store = require('./Store')
 
 // 1.创建express对象
 const app = express();
+
+// 创建配置文件读写对象
+const store = new Store({
+  configName: 'user-preferences',
+  defaults: {
+    imgClipSize: 1000,
+  }
+});
 
 // 2.加载插件
 // 在Express 中没有内置获取表单POST请求体的API,使用这个插件使其能够解析POST内容
@@ -100,7 +109,7 @@ app.post('/upload', function (req, res) {
             let image = nativeImage.createFromPath(newPath)
             let imgClip = {}
             if(fileType === 'jpeg'){
-              imgClip = image.resize({width: userConfig.imgClipSize*1})
+              imgClip = image.resize({width: store.get('imgClipSize')*1})
             }else {
               imgClip = image
             }
