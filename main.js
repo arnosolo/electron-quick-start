@@ -30,9 +30,9 @@ function createWindow () {
 
   // 修改关闭时的动作为隐藏
   mainWindow.on('close', (event) => { 
+    event.preventDefault();
     mainWindow.hide(); 
     mainWindow.setSkipTaskbar(true);
-    event.preventDefault();
   });
 
   // (重要)改成绝对路径就能解决打包后托盘消失的问题了
@@ -42,7 +42,7 @@ function createWindow () {
   const contextMenu = Menu.buildFromTemplate([
     {label: '退出', click: () => {mainWindow.destroy()}}, //完全退出程序
   ])
-  tray.setToolTip('This is my application.')
+  tray.setToolTip('快发一些文件过来吧.')
   tray.setContextMenu(contextMenu)
   // 点击托盘, 打开关闭窗口
   tray.on('click', ()=>{ 

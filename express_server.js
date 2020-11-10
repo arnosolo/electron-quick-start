@@ -9,7 +9,6 @@ const path = require('path')
 const { Notification, shell, clipboard, nativeImage } = require('electron')
 
 const util = require('./util')
-const userConfig = require('./user_config.json')
 const Store = require('./Store')
 
 // 1.创建express对象
@@ -56,7 +55,10 @@ app.post('/msg', function (req, res) {
     const urlArray = msg.match(/((https?:\/\/)+[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/g);
     // 点击通知打开网页
     notification.on('click' , () => {
-      shell.openExternal(urlArray[0])
+      if(urlArray[0] !== null){
+        // notification.body = '点击打开网页'
+        shell.openExternal(urlArray[0])
+      }
     })
 
     console.log('Msg received:', msg); 
@@ -108,8 +110,14 @@ app.post('/upload', function (req, res) {
             // 将图片添加到剪切板
             let image = nativeImage.createFromPath(newPath)
             let imgClip = {}
-            if(fileType === 'jpeg'){
-              imgClip = image.resize({width: store.get('imgClipSize')*1})
+            if(fileType === 'jpeg' || 'jpg'){
+              const imgClipSize = store.get('imgClipSize')*1
+              const {width, height} = image.getSize()
+              if(width > height) {
+                imgClip = image.resize({width:imgClipSize})
+              }else {
+                imgClip = image.resize({height:imgClipSize})
+              }
             }else {
               imgClip = image
             }
@@ -144,6 +152,20 @@ app.post('/upload', function (req, res) {
   
 });
   
+/* 打开网页开始下载 */
+app.get('/download', function (req,res) {
+    const url = './static/img/shortcut_QRcode.png'
+    // const url = './main.js'
+    const contentType = 'image/png'
+    //设置请求的返回头type,content的type类型列表见上面
+    res.setHeader("Content-Type", 'contentType');
+    //格式必须为 binary 否则会出错
+    var content =  fs.readFileSync(url,"binary");   
+    res.writeHead(200, "Ok");
+    res.write(content,"binary"); //格式必须为 binary，否则会出错
+    res.end();
+})
+
 // 4.开始监听请求
 app.listen(4000, ()=>{
     console.log('Server is running at http://localhost:4000')
