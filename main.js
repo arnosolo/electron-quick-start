@@ -2,12 +2,13 @@
 const {app, BrowserWindow, Menu, Tray, Notification} = require('electron')
 const path = require('path')
 const http = require('http')
+
 const express_server = require('./express_server')
 
 /* (重要)虽然并不需要再多监听一个端口,
   因为导入 ./express_server 以后会自动开始监听4000端口
   但是这么操作一下可以使windows防火墙允许electron开启http服务器. */
-http.createServer(express_server).listen('5000')
+http.createServer(express_server).listen('4100')
 
 let tray = null
 
@@ -40,9 +41,9 @@ function createWindow () {
   tray = new Tray(path.join(__dirname,'./static/img/clipboard.png'))
   // 托盘右键选项
   const contextMenu = Menu.buildFromTemplate([
-    {label: '退出', click: () => {mainWindow.destroy()}}, //完全退出程序
+    {label: 'exit', click: () => {mainWindow.destroy()}}, //完全退出程序
   ])
-  tray.setToolTip('快发一些文件过来吧.')
+  tray.setToolTip('I am ready to receive some photos.')
   tray.setContextMenu(contextMenu)
   // 点击托盘, 打开关闭窗口
   tray.on('click', ()=>{ 
@@ -66,8 +67,8 @@ app.whenReady().then(() => {
 }).then(() => {
   // 显示系统通知
   new Notification({
-    title: '局域网剪切板已启动',
-    body: '关闭设置窗口后将继续在托盘运行',
+    title: 'iOS file receiver is running.',
+    body: 'After closing the setting window, I will keep running in the tray',
     icon: path.join(__dirname,'./static/img/clipboard.png'),
   }).show()
 })

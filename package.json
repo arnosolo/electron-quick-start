@@ -1,7 +1,7 @@
 {
-  "name": "ios_clipboard_to_desktop",
+  "name": "ios_photos_to_win",
   "version": "1.0.0",
-  "description": "copy ios clipboard to desktop",
+  "description": "send ios clipboard photos files to desktop",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -14,7 +14,7 @@
     "ios",
     "airdrop"
   ],
-  "author": "Arno",
+  "author": "Arno Solo",
   "license": "",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
@@ -38,12 +38,14 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./static/img/icon_grey.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "electron_quick_start"
+            "name": "ios_photos_to_win"
           }
         },
         {

@@ -8,30 +8,41 @@
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <link rel="stylesheet" href="./static/css/styles.css" />
     <link rel="stylesheet" href="./static/css/bootstrap.min.css" />
-    <title>局域网剪切板</title>
+    <title>Send Photos from iOS to Win on one click</title>
   </head>
   <body>
-        
+    <h2 class="center">Send Photos from iOS to Win on one click</h2>
+    <br>
     <div class="container">
       <div class="row">
         <div class="col-sm-3">
-          <h3>1 获取捷径</h3>
+          <h3>1 Get Shortcut</h3>
           <a href="https://www.icloud.com/shortcuts/8960b157cc9a4820be35a093ae6ef2b9">
             <img src="./static/img/shortcut_QRcode.png" alt="shortcut_QRcode" class="qrcode">
           </a>
         </div>
         <div class="col-sm">
-          <h3>2 配置捷径</h3>
-          <h5>2.1 查看本机局域网地址</h5>
-          <img src="./static/img/查看本机ip地址_图形界面.jpeg" alt="查看本机局域网地址" class="ip_img">
-          <br>
-          <h5>2.2 在捷径中输入</h5>
-          <img src="./static/img/在捷径中输入本机局域网地址.png" alt="在捷径中输入本机局域网地址" class="step_img">
+          <h3>2 Shortcut config</h3>
+          <h5>2.1 Get LAN address of your computer</h5>
+          <img src="./static/img/get_lan_ip_address.png" alt="get_lan_ip_address" class="ip_img">
+          <br> <br>
+          <h5>2.2 Set computer ip in Shortcut</h5>
+          <img src="./static/img/shortcut_config.png" alt="shortcut_config" class="step_img">
         </div>
         <div class="col-sm">
-          <h3>3 使用捷径</h3>
-          <h5>在分享菜单向window发送图片或文本</h5>
-          <img src="./static/img/通过捷径向window发送图片或文本.jpeg" alt="通过捷径向window发送图片或文本" class="step_img">
+          <h3>3 Send photo from iPhone</h3>
+          <h5>3.1 Click share button</h5>
+          <img src="./static/img/share_img.png" alt="share_img" class="step_img">
+          <br><br>
+          <h5>3.2 Check Pictures folder</h5>
+          <!-- <img src="./static/img/img_saved.png" alt="share_img" class="ip_img"> -->
+        </div>
+        <div class="col-sm">
+          <h3>Tips</h3>
+          <ol>
+            <li>Auto Start. Put a shortcut in C:\ProgramData\Microsoft\Windows\Start Menu\Programs</li>
+
+          </ol>
         </div>
       </div>
     </div>
@@ -39,10 +50,11 @@
       <div class="center">
         <!-- <button onclick="showSetting()" class="btn btn-light">偏好设置</button> -->
         <!-- <a href="mailto:arno756@outlook.com" class="btn btn-light">联系作者</a> -->
-        <button onclick="showPayment()" class="btn btn-light">向作者投递两枚硬币</button>
+        <button onclick="showPayment()" class="btn btn-light">paypal.me</button>
         <br>
-        <img id="alipay_qrcode" src="./static/img/alipay_qrcode.jpeg" 
-          alt="alipay_qrcode" class="hidden" style="margin: 0 auto;">
+        <p id="alipay_qrcode" class="hidden">https://www.paypal.me/arno76</p>
+        <!-- <img id="alipay_qrcode" src="./static/img/alipay_qrcode.jpeg" 
+          alt="alipay_qrcode" class="hidden" style="margin: 0 auto;"> -->
       </div>
     <script src="./renderer.js"></script>
   </body>

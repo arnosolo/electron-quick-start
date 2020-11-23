@@ -6,6 +6,7 @@ var logger = require('morgan');
 const fs = require("fs")
 const os = require('os')
 const path = require('path')
+const http = require('http')
 const { Notification, shell, clipboard, nativeImage } = require('electron')
 
 const util = require('./util')
@@ -46,7 +47,7 @@ app.post('/msg', function (req, res) {
     
     // 显示系统通知
     const notification = new Notification({
-      title: '消息 --> 剪切板',
+      title: 'msg --> clipboard',
       body: `${msg}`,
       icon: path.join(__dirname,'./static/img/clipboard.png'),
     })
@@ -126,7 +127,7 @@ app.post('/upload', function (req, res) {
 
             // 显示系统通知
             const notification = new Notification({
-              title: '文件 --> Pictures文件夹',
+              title: 'file --> Pictures folder',
               body: `${file.name}`,
               icon: path.join(__dirname,'./static/img/clipboard.png'),
             })
@@ -170,5 +171,6 @@ app.get('/download', function (req,res) {
 app.listen(4000, ()=>{
     console.log('Server is running at http://localhost:4000')
 })
+// http.createServer(app).listen('4000')
 
 module.exports = app;
