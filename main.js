@@ -73,6 +73,14 @@ app.whenReady().then(() => {
   }).show()
 })
 
+// Auto Start
+// app.setLoginItemSettings({
+//   openAtLogin: true, // Boolean 在登录时启动应用
+//   openAsHidden: true, // Boolean (可选) mac 表示以隐藏的方式启动应用。~~~~
+//   path: path.join(__dirname,'./out/ios_photos_to_win-win32-x64/ios_photos_to_win.exe'), // String (可选) Windows - 在登录时启动的可执行文件。默认为 process.execPath.
+//   // args: [] String Windows - 要传递给可执行文件的命令行参数。默认为空数组。注意用引号将路径换行。
+// })
+
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })

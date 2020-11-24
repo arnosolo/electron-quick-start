@@ -6,6 +6,10 @@
 * Files --> Pictures folder.
 * Web link can be opened if you click the receive notification in Windows.
 
+##### Demo
+
+​	https://youtu.be/UPjAv-dKj6A
+
 
 
 ##### How it work
@@ -14,7 +18,20 @@
 
 
 
+##### Releases
+
+* [Windows server](https://github.com/arnosolo/send_ios_photos_to_win/releases)
+* [iOS shortcut](https://www.icloud.com/shortcuts/21da3bc46e654f889e3dd4028f7cfa90)
+
+
+
 ##### Dev
+
+* [Github repo](https://github.com/arnosolo/send_ios_photos_to_win)
+
+  ```shell
+  https://github.com/arnosolo/edit_photo_location.git
+  ```
 
 * dev
 
