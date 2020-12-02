@@ -6,7 +6,6 @@ var logger = require('morgan');
 const fs = require("fs")
 const os = require('os')
 const path = require('path')
-const http = require('http')
 const { Notification, shell, clipboard, nativeImage } = require('electron')
 
 const util = require('./util')
@@ -19,7 +18,8 @@ const app = express();
 const store = new Store({
   configName: 'user-preferences',
   defaults: {
-    imgClipSize: 1000,
+    imgClipSize: 1000, // 剪切板图片最大尺寸
+    savePath: '\\Pictures\\' // 保存路径
   }
 });
 
@@ -47,7 +47,7 @@ app.post('/msg', function (req, res) {
     
     // 显示系统通知
     const notification = new Notification({
-      title: 'msg --> clipboard',
+      title: 'Msg --> Clipboard',
       body: `${msg}`,
       icon: path.join(__dirname,'./static/img/clipboard.png'),
     })
@@ -85,7 +85,9 @@ app.post('/upload', function (req, res) {
         const fileName = file.name.split('.')[0]
         const fileType = file.name.split('.')[1]
         const oldPath = file.path
-        let newPath = homedir + '\\Pictures\\'
+        // let newPath = homedir + '\\Pictures\\'
+        const savePath = store.get('savePath')
+        let newPath = homedir + savePath
         // 如果文件夹不存在，创建
         util.checkDirExist(newPath)
         newPath += fileName + '_' + Date.now() + '.' + fileType
@@ -127,7 +129,7 @@ app.post('/upload', function (req, res) {
 
             // 显示系统通知
             const notification = new Notification({
-              title: 'file --> Pictures folder',
+              title: 'File --> Folder',
               body: `${file.name}`,
               icon: path.join(__dirname,'./static/img/clipboard.png'),
             })
