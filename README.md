@@ -1,10 +1,10 @@
-#### Send Photos from iOS to Win on one click
+#### Transfer Photos from iOS to Win on one click
 
 ##### Features
 
 * iOS clipboard  -->  Windows clipboard.
 * Files --> Pictures folder.
-* Web link can be opened if you click the receive notification in Windows.
+
 
 ##### Demo
 
@@ -42,7 +42,7 @@
 * build
 
   ```shell
-  npm run make
+  npm run dist
   ```
 
   

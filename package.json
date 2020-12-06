@@ -1,12 +1,14 @@
 {
-  "name": "ios_photos_to_win",
+  "name": "transfer_file_from_ios_to_desktop",
   "version": "1.0.0",
   "description": "send ios clipboard photos files to desktop",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "pack": "electron-builder --dir", 
+	  "dist": "electron-builder" 
   },
   "repository": "",
   "keywords": [
@@ -22,7 +24,9 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^10.1.5"
+    "electron": "^10.1.5",
+    "electron-builder": "^22.9.1",
+    "electron-winstaller": "^4.0.1"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -33,9 +37,27 @@
     "formidable": "^1.2.2",
     "heic-convert": "^1.2.3",
     "http-server": "^0.12.3",
-    "jade": "^1.11.0",
     "morgan": "^1.10.0"
   },
+
+  "build": {
+    "appId": "ios_to_desktop", 
+    "productName": "ios_to_desktop", 
+    "copyright": "Copyright ©️2020 Arno Solo", 
+    "extends": null, 
+    "win": {
+      "target": ["nsis"],
+      "icon": "static/img/icon_grey_large.ico",
+      "artifactName": "${productName}-setup-${version}.${ext}",
+      "publisherName": "Arno Solo"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    }
+},
+
   "config": {
     "forge": {
       "packagerConfig": {
@@ -45,7 +67,8 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "ios_photos_to_win"
+            "name": "transfer_file_from_ios_to_desktop",
+            "setupMsi": "hello"
           }
         },
         {
