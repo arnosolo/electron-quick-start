@@ -43,7 +43,8 @@ app.get('/', (req, res)=>{
 /* 处理发来的消息 */
 app.post('/msg', function (req, res) {
     const { msg } = req.body
-    clipboardy.write(msg)
+    // clipboardy.write(msg)
+    clipboard.writeText(msg)
     
     // 显示系统通知
     const notification = new Notification({
