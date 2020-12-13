@@ -15,16 +15,17 @@ let tray = null
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    // width: 998,
+    width: 700,
     // height: 600,
-    show: false,
+    autoHideMenuBar: true,
+    // show: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       enableRemoteModule: true
     }
   })
-  mainWindow.maximize()
+  // mainWindow.maximize() //窗口最大化
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
@@ -36,8 +37,8 @@ function createWindow () {
     mainWindow.setSkipTaskbar(true);
   });
 
+  /* 定义托盘功能 */
   // (重要)改成绝对路径就能解决打包后托盘消失的问题了
-  // tray = new Tray('./static/img/clipboard.png')
   tray = new Tray(path.join(__dirname,'./static/img/clipboard.png'))
   // 托盘右键选项
   const contextMenu = Menu.buildFromTemplate([
@@ -52,23 +53,18 @@ function createWindow () {
 
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
 
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
 }).then(() => {
   // 显示系统通知
   new Notification({
-    title: 'iOS file receiver is running.',
-    body: 'After closing the setting window, I will keep running in the tray',
+    title: '✔ Ready to receive messages from iOS',
+    body: 'After closing front window, I will keep running in tray.',
     icon: path.join(__dirname,'./static/img/clipboard.png'),
   }).show()
 })

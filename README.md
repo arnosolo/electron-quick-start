@@ -30,7 +30,7 @@
 * [Github repo](https://github.com/arnosolo/send_ios_photos_to_win)
 
   ```shell
-  https://github.com/arnosolo/edit_photo_location.git
+  git clone https://github.com/arnosolo/edit_photo_location.git
   ```
 
 * dev
