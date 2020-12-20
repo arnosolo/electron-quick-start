@@ -1,5 +1,4 @@
 const express = require('express');
-const clipboardy = require('clipboardy');
 const bodyParser = require('body-parser');
 const formidable = require("formidable")
 var logger = require('morgan');
@@ -8,8 +7,8 @@ const os = require('os')
 const path = require('path')
 const { Notification, shell, clipboard, nativeImage } = require('electron')
 
-const util = require('./util')
-const Store = require('./Store')
+const util = require('./utils/util')
+const Store = require('./utils/Store')
 
 // step1.创建express对象
 const app = express();
@@ -44,12 +43,11 @@ app.get('/', (req, res)=>{
 /* 处理发来的消息 */
 app.post('/msg', function (req, res) {
     const { msg } = req.body
-    // clipboardy.write(msg)
     clipboard.writeText(msg)
     
     // 显示系统通知
     const notification = new Notification({
-      title: 'text --> clipboard',
+      title: 'Text --> Clipboard',
       body: `${msg}`,
       icon: path.join(__dirname,'./static/img/clipboard.png'),
     })
@@ -118,6 +116,7 @@ app.post('/upload', function (req, res) {
             let image = nativeImage.createFromPath(newPath)
             let imgClip = {}
             if(fileType === 'jpeg' || 'jpg'){
+              // 读取用户配置
               const imgClipSize = store.get('imgClipSize')*1
               const {width, height} = image.getSize()
               if(width > height) {
@@ -133,7 +132,7 @@ app.post('/upload', function (req, res) {
 
             // 显示系统通知
             const notification = new Notification({
-              title: 'file --> picture folder',
+              title: 'File --> Picture folder',
               body: `click me to open ${file.name}`,
               icon: path.join(__dirname,'./static/img/clipboard.png'),
             })
@@ -161,13 +160,9 @@ app.post('/upload', function (req, res) {
   
 /* 打开网页开始下载 */
 app.get('/download', function (req,res) {
-    const url = './static/img/shortcut_QRcode.png'
-    // const url = './main.js'
-    const contentType = 'image/png'
-    //设置请求的返回头type,content的type类型列表见上面
-    res.setHeader("Content-Type", 'contentType');
-    //格式必须为 binary 否则会出错
-    var content =  fs.readFileSync(url,"binary");   
+    const url = './static/img/alipay_qrcode.jpeg'
+    // 格式必须为 binary 否则会出错
+    var content =  fs.readFileSync(url,"binary");
     res.writeHead(200, "Ok");
     res.write(content,"binary"); //格式必须为 binary，否则会出错
     res.end();

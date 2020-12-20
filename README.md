@@ -27,22 +27,18 @@
 
 ##### Dev
 
-* [Github repo](https://github.com/arnosolo/send_ios_photos_to_win)
-
-  ```shell
-  git clone https://github.com/arnosolo/edit_photo_location.git
-  ```
-
 * dev
 
   ```shell
+  git clone https://github.com/arnosolo/send_ios_photos_to_win.git
+  npm install
   npm start
   ```
 
-* build
+* pack dist
 
   ```shell
   npm run dist
   ```
 
-  
+
