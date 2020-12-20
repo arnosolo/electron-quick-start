@@ -7,8 +7,8 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "pack": "electron-builder --dir", 
-	  "dist": "electron-builder" 
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": "",
   "keywords": [
@@ -39,10 +39,10 @@
   },
 
   "build": {
-    "appId": "ios_to_desktop", 
-    "productName": "ios_to_desktop", 
-    "copyright": "Copyright ©️2020 Arno Solo", 
-    "extends": null, 
+    "appId": "ios_to_desktop",
+    "productName": "ios_to_desktop",
+    "copyright": "Copyright ©️2020 Arno Solo",
+    "extends": null,
     "win": {
       "target": ["nsis"],
       "icon": "static/img/icon_grey_large.ico",

@@ -113,21 +113,23 @@ app.post('/upload', function (req, res) {
             console.log('File saved: ', file.name);
 
             // 将图片添加到剪切板
-            let image = nativeImage.createFromPath(newPath)
+            let receivedImage = nativeImage.createFromPath(newPath)
             let imgClip = {}
-            if(fileType === 'jpeg' || 'jpg'){
-              // 读取用户配置
-              const imgClipSize = store.get('imgClipSize')*1
+            const imgClipSize = store.get('imgClipSize')*1 // 读取用户配置
+            const resizeImg = (image, size) => {
               const {width, height} = image.getSize()
-              if(width > height) {
-                imgClip = image.resize({width:imgClipSize})
-              }else {
-                imgClip = image.resize({height:imgClipSize})
-              }
-            }else {
-              imgClip = image
+              return (width > height) ? image.resize({width:size}) : image.resize({height:size})
             }
-
+            switch(fileType) {
+              case 'jpeg':
+                imgClip = resizeImg(receivedImage, imgClipSize)
+                break;
+              case 'jpg':
+                imgClip = resizeImg(receivedImage, imgClipSize)
+                break;
+              default:
+                imgClip = image
+            }
             clipboard.writeImage(imgClip)
 
             // 显示系统通知
