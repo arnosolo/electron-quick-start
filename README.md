@@ -2,10 +2,11 @@
 
 ##### Features
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/UPjAv-dKj6A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<img src="README.assets/Snipaste_2021-04-03_18-13-04.png" alt="Snipaste_2021-04-03_18-13-04" style="zoom:50%;" />
 
 * iOS clipboard  -->  Windows clipboard
 * iOS photo --> Windows folder
+* [Video demo](https://youtu.be/UPjAv-dKj6A)
 
 
 
@@ -17,8 +18,7 @@
 
 ##### Install
 
-* [Windows server](https://github.com/arnosolo/send_ios_photos_to_win/releases)
-* [iOS shortcut](https://www.icloud.com/shortcuts/21da3bc46e654f889e3dd4028f7cfa90)
+* [windows setup](https://github.com/arnosolo/send_ios_photos_to_win/releases)
 
 
 
