@@ -16,7 +16,7 @@ http.createServer(express_server).listen('4100')
 /* 定义主窗口功能 */
 function createWindow () {
   const mainWindow = new BrowserWindow({
-    width: 700,
+    width: 800,
     // height: 600,
     autoHideMenuBar: true,
     // show: true,

@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const formidable = require("formidable")
 var logger = require('morgan');
 const fs = require("fs")
@@ -10,23 +9,22 @@ const { Notification, shell, clipboard, nativeImage } = require('electron')
 const util = require('./utils/util')
 const Store = require('./utils/Store')
 
-// step1.创建express对象
-const app = express();
+/* 1/4 创建express对象 */
+const app = express()
+const port = 4000
 
 // 创建配置文件读写对象
 const store = new Store({
   configName: 'user-preferences',
   defaults: {
     imgClipSize: 1000, // 剪切板图片最大尺寸
-    // savePath: '\\Pictures\\' // 保存路径
-    savePath: '/Pictures/' // 保存路径 使用path.join可以解决win的路径分隔符为\的问题
+    savePath: '/Pictures' // 保存路径 使用path.join可以解决win的路径分隔符为\的问题
   }
 });
 
-// step2.加载插件
-// 在Express 中没有内置获取表单POST请求体的API,使用这个插件使其能够解析POST内容
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+/* 2/4 加载中间件 */
+app.use(express.urlencoded({extended: false}))
+app.use(express.json())
 app.use(logger('dev'));
 
 // view engine setup
@@ -34,7 +32,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine( '.html', require( 'ejs' ).__express );
 
-// step3.决定如何响应请求
+/* 3/4 决定如何响应请求 */
 /* 渲染网页端 */
 app.get('/', (req, res)=>{
     res.render('index', { title: ''});
@@ -59,11 +57,10 @@ app.post('/msg', function (req, res) {
         shell.openExternal(urlArray[0])
       }
     })
-
     notification.show()
 
     console.log('Msg received:', msg); 
-    res.send({code:1, msg:'success'})
+    res.send({success:true, msg:'success'})
 })
 
 /* 处理发来的文件 */
@@ -82,34 +79,29 @@ app.post('/upload', function (req, res) {
         if (file.size == 0 && file.name == '') continue
 
         /* 2.保存文件到指定文件夹 */
-        const fileName = file.name.split('.')[0]
-        const fileType = file.name.split('.')[1]
+        const fileName = path.basename(file.name, path.extname(file.name))
+        const fileType = path.extname(file.name)
         const oldPath = file.path
-        // let newPath = homedir + '\\Pictures\\'
         const savePath = store.get('savePath')
-        // let newPath = homedir + savePath
-        let newPath = path.join(homedir, savePath)
+        const saveDir = path.join(homedir, savePath)
         // 如果文件夹不存在，创建
-        util.checkDirExist(newPath)
-        newPath += fileName + '_' + Date.now() + '.' + fileType
+        util.checkDirExist(saveDir)
+        const newPath = path.join(saveDir, (fileName + '_' + Date.now() + fileType))
         // 保存文件
         var readStream = fs.createReadStream(oldPath)
         var writeStream = fs.createWriteStream(newPath)
         readStream.pipe(writeStream)
-        let had_error = false
-        readStream.on('error', function(err){
+        readStream.on('error', err => {
           if (err) throw err
-          had_error = true;
         });
+        /* 
+          3.保存文件后
+            3.1 将图片添加到剪切板
+            3.2 发送一条系统通知
+            3.3 删除临时文件 
+        */
         readStream.on('close', function(){
           // res.status(500).send({ error: 'Something failed!' })
-
-          /* 
-            3.保存文件后
-              3.1 将图片添加到剪切板
-              3.2 发送一条系统通知
-              3.3 删除临时文件 */
-          if (!had_error) {
             console.log('File saved: ', file.name);
 
             // 将图片添加到剪切板
@@ -121,14 +113,14 @@ app.post('/upload', function (req, res) {
               return (width > height) ? image.resize({width:size}) : image.resize({height:size})
             }
             switch(fileType) {
-              case 'jpeg':
+              case '.jpeg':
                 imgClip = resizeImg(receivedImage, imgClipSize)
                 break;
-              case 'jpg':
+              case '.jpg':
                 imgClip = resizeImg(receivedImage, imgClipSize)
                 break;
               default:
-                imgClip = image
+                imgClip = receivedImage
             }
             clipboard.writeImage(imgClip)
 
@@ -150,17 +142,17 @@ app.post('/upload', function (req, res) {
               if (err) throw err
             }) 
             
-          }
+          
         });
         
       }
       
-    res.send({code:1, msg:'File transfer success.'})
+    res.send({success:true, msg:'File transfer success.'})
   })
   
 });
   
-/* 打开网页开始下载 */
+/* 分享本机文件 */
 app.get('/download', function (req,res) {
     const url = './static/img/alipay_qrcode.jpeg'
     // 格式必须为 binary 否则会出错
@@ -170,10 +162,9 @@ app.get('/download', function (req,res) {
     res.end();
 })
 
-// step4.开始监听请求
-app.listen(4000, ()=>{
-    console.log('Server is running at http://localhost:4000')
+/* 4/4开始监听请求 */
+app.listen(port, ()=>{
+    console.log(`Server is running at http://localhost:${port}`)
 })
-// http.createServer(app).listen('4000')
 
 module.exports = app;

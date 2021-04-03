@@ -24,12 +24,11 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^10.1.5",
-    "electron-builder": "^22.9.1"
+    "electron": "^10.3.0",
+    "electron-builder": "^22.10.5",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "clipboardy": "^2.3.0",
     "ejs": "^3.1.5",
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.17.1",
@@ -37,14 +36,15 @@
     "http-server": "^0.12.3",
     "morgan": "^1.10.0"
   },
-
   "build": {
     "appId": "ios_to_desktop",
     "productName": "ios_to_desktop",
     "copyright": "Copyright ©️2020 Arno Solo",
     "extends": null,
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "static/img/icon_grey_large.ico",
       "artifactName": "${productName}-setup-${version}.${ext}",
       "publisherName": "Arno Solo"
@@ -55,7 +55,6 @@
       "perMachine": false
     }
   },
-
   "config": {
     "forge": {
       "packagerConfig": {

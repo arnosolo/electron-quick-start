@@ -2,13 +2,10 @@
 
 ##### Features
 
-* iOS clipboard  -->  Windows clipboard.
-* Files --> Pictures folder.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UPjAv-dKj6A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-
-##### Demo
-
-​	https://youtu.be/UPjAv-dKj6A
+* iOS clipboard  -->  Windows clipboard
+* iOS photo --> Windows folder
 
 
 
@@ -18,7 +15,7 @@
 
 
 
-##### Releases
+##### Install
 
 * [Windows server](https://github.com/arnosolo/send_ios_photos_to_win/releases)
 * [iOS shortcut](https://www.icloud.com/shortcuts/21da3bc46e654f889e3dd4028f7cfa90)
@@ -35,7 +32,7 @@
   npm start
   ```
 
-* pack dist
+* pack
 
   ```shell
   npm run dist
