@@ -1,7 +1,7 @@
 {
   "name": "transfer_file_from_ios_to_desktop",
-  "version": "1.0.0",
-  "description": "send ios clipboard photos files to desktop",
+  "version": "1.0.1",
+  "description": "send ios clipboard / photos / files to desktop",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -10,7 +10,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "repository": "",
+  "repository": "https://github.com/arnosolo/send_ios_photos_to_win.git",
   "keywords": [
     "clipboard",
     "ios",

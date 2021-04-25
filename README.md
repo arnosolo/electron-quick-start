@@ -2,7 +2,7 @@
 
 ##### Features
 
-<img src="README.assets/Snipaste_2021-04-03_18-13-04.png" alt="Snipaste_2021-04-03_18-13-04" style="zoom:50%;" />
+<img src="README.assets/Snipaste_2021-04-03_18-13-04.png" alt="Snipaste_2021-04-03_18-13-04" style="zoom: 67%; float:left" />
 
 * iOS clipboard  -->  Windows clipboard
 * iOS photo --> Windows folder

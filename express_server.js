@@ -63,6 +63,27 @@ app.post('/msg', function (req, res) {
     res.send({success:true, msg:'success'})
 })
 
+const copyFile = (from, to) => {
+  return new Promise((resolve, reject) => {
+    const copy = fs.createReadStream(from).pipe(fs.createWriteStream(to))
+    copy.on('close', () => resolve('copy finish'))
+    copy.on('error', () => reject('copy error'))
+  })
+}
+
+const deleteFile = (filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(filePath, err =>{
+      if(err){
+        reject(err)
+        return
+      }
+    })
+    resolve(`successfully delete ${filePath}`)
+  })
+}
+
+
 /* 处理发来的文件 */
 app.post('/upload', function (req, res) {
   // 获取用户信息
@@ -87,24 +108,19 @@ app.post('/upload', function (req, res) {
         // 如果文件夹不存在，创建
         util.checkDirExist(saveDir)
         const newPath = path.join(saveDir, (fileName + '_' + Date.now() + fileType))
-        // 保存文件
-        var readStream = fs.createReadStream(oldPath)
-        var writeStream = fs.createWriteStream(newPath)
-        readStream.pipe(writeStream)
-        readStream.on('error', err => {
-          if (err) throw err
-        });
+        
         /* 
           3.保存文件后
             3.1 将图片添加到剪切板
             3.2 发送一条系统通知
             3.3 删除临时文件 
         */
-        readStream.on('close', function(){
-          // res.status(500).send({ error: 'Something failed!' })
-            console.log('File saved: ', file.name);
 
-            // 将图片添加到剪切板
+       const copyAndDelete = async () => {
+          // 保存文件
+          await copyFile(oldPath, newPath)
+
+          // 将图片添加到剪切板
             let receivedImage = nativeImage.createFromPath(newPath)
             let imgClip = {}
             const imgClipSize = store.get('imgClipSize')*1 // 读取用户配置
@@ -124,26 +140,77 @@ app.post('/upload', function (req, res) {
             }
             clipboard.writeImage(imgClip)
 
-            // 显示系统通知
-            const notification = new Notification({
-              title: 'File --> Picture folder',
-              body: `click me to open ${file.name}`,
-              icon: path.join(__dirname,'./static/img/clipboard.png'),
-            })
-            notification.show()
-            // 点击通知跳转到资源管理器
-            notification.on('click' , () => {
-                shell.showItemInFolder(newPath)
-                console.log('Notification clicked:', file.name)
-            })
+          // 显示系统通知
+          const notification = new Notification({
+            title: 'File --> Picture folder',
+            body: `click me to open ${fileName}`,
+            icon: path.join(__dirname, './static/img/clipboard.png'),
+          })
+          notification.on('click', () => { // 点击通知跳转到资源管理器
+            shell.showItemInFolder(newPath)
+            console.log('Notification clicked:', fileName)
+          })
+          notification.show()
+          console.log('hello');
 
-            // 删除临时文件
-            fs.unlink(oldPath, (err) => {
-              if (err) throw err
-            }) 
+          // 删除临时文件
+          await deleteFile(oldPath)
+        }
+
+        copyAndDelete()
+        
+
+        // var readStream = fs.createReadStream(oldPath)
+        // var writeStream = fs.createWriteStream(newPath)
+        // readStream.pipe(writeStream)
+        // readStream.on('error', err => {
+        //   if (err) throw err
+        // });
+        
+        // readStream.on('close', function(){
+        //   // res.status(500).send({ error: 'Something failed!' })
+        //     console.log('File saved: ', file.name);
+
+        //     // 将图片添加到剪切板
+        //     let receivedImage = nativeImage.createFromPath(newPath)
+        //     let imgClip = {}
+        //     const imgClipSize = store.get('imgClipSize')*1 // 读取用户配置
+        //     const resizeImg = (image, size) => {
+        //       const {width, height} = image.getSize()
+        //       return (width > height) ? image.resize({width:size}) : image.resize({height:size})
+        //     }
+        //     switch(fileType) {
+        //       case '.jpeg':
+        //         imgClip = resizeImg(receivedImage, imgClipSize)
+        //         break;
+        //       case '.jpg':
+        //         imgClip = resizeImg(receivedImage, imgClipSize)
+        //         break;
+        //       default:
+        //         imgClip = receivedImage
+        //     }
+        //     clipboard.writeImage(imgClip)
+
+        //     // 显示系统通知
+        //     const notification = new Notification({
+        //       title: 'File --> Picture folder',
+        //       body: `click me to open ${file.name}`,
+        //       icon: path.join(__dirname,'./static/img/clipboard.png'),
+        //     })
+        //     notification.show()
+        //     // 点击通知跳转到资源管理器
+        //     notification.on('click' , () => {
+        //         shell.showItemInFolder(newPath)
+        //         console.log('Notification clicked:', file.name)
+        //     })
+
+        //     // 删除临时文件
+        //     fs.unlink(oldPath, (err) => {
+        //       if (err) throw err
+        //     }) 
             
           
-        });
+        // });
         
       }
       
