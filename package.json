@@ -1,6 +1,6 @@
 {
   "name": "transfer_file_from_ios_to_desktop",
-  "version": "1.0.1",
+  "version": "1.2.1",
   "description": "send ios clipboard / photos / files to desktop",
   "main": "main.js",
   "scripts": {
