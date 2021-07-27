@@ -2,7 +2,7 @@
 
 ##### Features
 
-<img src="README.assets/Snipaste_2021-04-03_18-13-04.png" alt="Snipaste_2021-04-03_18-13-04" style="zoom: 67%; float:left" />
+![一键从ios发文件到win10](README.assets/一键从ios发文件到win10.gif)
 
 * iOS clipboard  -->  Windows clipboard
 * iOS photo --> Windows folder

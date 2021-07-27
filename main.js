@@ -83,7 +83,6 @@ app.whenReady()
 
 //设置开机启动
 if (app.isPackaged) {
-  //设置开机启动
   app.setLoginItemSettings({
     openAtLogin: true
   });

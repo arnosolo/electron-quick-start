@@ -14,9 +14,8 @@ function showSetting () {
   } else {
     setting.className = 'show'
   }
-  store.set('imgClipSize', 998)
+  store.set('imgClipSize', 500)
   console.log(store.get('imgClipSize'));
-  console.log();
 }
 
 function showPayment () {
