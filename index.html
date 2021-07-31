@@ -1,99 +1,119 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <link rel="stylesheet" href="./static/css/styles.css" />
-    <link rel="stylesheet" href="./static/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <title>Send Photos from iOS to Win on one click</title>
-  </head>
-  <body>
-   
-    <div class="row">
-      
-      <div class="col">
-        <div class="tab-content" id="v-pills-tabContent">
-          <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  <br>
-                  <h3>1 Get computer lan address</h3>
-                  <img src="./static/img/get_lan_ip_address.png" alt="get_lan_ip_address" class="ip_img">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <link rel="stylesheet" href="./static/css/styles.css" />
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css" />
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+
+  <title>Share Photos between iOS and Windows</title>
+  <!-- import Vue before Element -->
+  <!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
+</head>
+
+<body>
+
+  <div class="container">
+        <!-- 导航栏 -->
+        <!-- <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist"> -->
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="receive-tab" data-bs-toggle="tab" data-bs-target="#receive"
+              type="button" role="tab" aria-controls="receive" aria-selected="true">iOS -> Win</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="send-tab" data-bs-toggle="tab" data-bs-target="#send" type="button" role="tab"
+              aria-controls="send" aria-selected="false">Win -> iOS</button>
+          </li>
+        </ul>
+        <!-- 导航栏内容 -->
+        <div class="tab-content" id="myTabContent">
+          <!-- 接收页面 -->
+          <div class="tab-pane fade show active receive-content" id="receive-content" role="tabpanel" aria-labelledby="receive-tab">
+            <div class="">
+              <br>
+              <h3>1 Config</h3>
+              <p>1.1 PC LAN IP</p>
+              <img src="./static/img/get_lan_ip_address.png" alt="get_lan_ip_address" class="ip_img">
+            </div>
+            <div class="">
+              <br>
+              <p>1.2 Set PC IP in iOS shortcut</p>
+              <!-- <h5>1.2.1 get shortcut</h5> -->
+              <a href="https://www.icloud.com/shortcuts/8960b157cc9a4820be35a093ae6ef2b9">
+                <img src="./static/img/shortcut_QRcode.png" alt="shortcut_QRcode" class="qrcode">
+              </a>
+              <!-- <h5>1.2.2 set computer ip in shortcut</h5> -->
+              <img src="./static/img/shortcut_config.png" alt="shortcut_config" class="step_img">
+            </div>
+            <div class="">
+              <br>
+              <h3>2 Send</h3>
+              <img src="./static/img/share_img.png" alt="share_img" class="step_img">
+              <br><br>
+              <h3>3 Receive</h3>
+              <img src="./static/img/win_notification.png" alt="share_img" class="step_img">
+            </div>
+
+            <div class="">
+              <br>
+              <h3>Tips</h3>
+              <ol>
+                <li>Make sure your devices are in same LAN.</li>
+                <li>Manage auto start: Search 'startup' on windows settings.</li>
+              </ol>
+            </div>
+
+          </div>
+
+          <!-- 发送页面 -->
+
+          <div class="tab-pane fade " id="send-content" role="tabpanel" aria-labelledby="send-tab">
+            <div class="col-md-6">
+              <div class="card text-center"><br>
+                <h2 class="card-title">Send to iOS</h2>
+                <div class="card-body send-card">
+                  <div>
+                    <h5>Set PC LAN IP</h5>
+                    <input type="text" placeholder="LAN IP" id="lan-ip-input" value="">
+                  </div>
+                  <div>
+                    <button id="share-btn" class="btn btn-primary normal-btn">Choose a file</button>
+                    <p id="share-status"></p>
+                  </div>
+                  <div>
+                    <h5>Scan qrCode to get file</h5>
+                    <canvas id="canvas"></canvas>
+                    <p id="qrcode-str"></p>
+                  </div>
                 </div>
-                <div class="col-sm">
-                  <br>
-                  <h3>2 Set shortcut</h3>
-                  <h5>2.1 get shortcut</h5>
-                  <a href="https://www.icloud.com/shortcuts/8960b157cc9a4820be35a093ae6ef2b9">
-                    <img src="./static/img/shortcut_QRcode.png" alt="shortcut_QRcode" class="qrcode">
-                  </a>
-                  <br> <br>
-                  <h5>2.2 set computer ip in shortcut</h5>
-                  <img src="./static/img/shortcut_config.png" alt="shortcut_config" class="step_img">
-                </div>
-                <div class="col-sm">
-                  <br>
-                  <h3>3 Send photo</h3>
-                  <h5>3.1 find shortcut in share menu</h5>
-                  <img src="./static/img/share_img.png" alt="share_img" class="step_img">
-                  <br><br>
-                  <h5>3.2 click notification to jump to picture folder</h5>
-                  <img src="./static/img/win_notification.png" alt="share_img" class="step_img">
-                </div>
-        
-                <div class="col-sm">
-                  <br>
-                  <h3>Tips</h3>
-                  <ol>
-                    <li>Make sure your devices are in same LAN.</li>
-                    <li>Manage auto start: Search 'startup' on windows settings.</li>
-                  </ol>
-                </div>
-                
               </div>
+
             </div>
           </div>
-          <div class="tab-pane fade" id="v-pills-share" role="tabpanel" aria-labelledby="v-pills-share-tab">...</div>
-          <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
         </div>
-      </div>
-    </div>
+  </div>
 
-    
-      <br>
-      <div class="center">
+
+
+
+
+
+  <br>
+  <!-- <div class="center">
         <button onclick="showPayment()" class="btn btn-light">paypal.me</button>
         <br>
         <p id="alipay_qrcode" class="hidden">https://www.paypal.me/arno76</p>
-      </div>
-    <script src="./renderer.js"></script>
-  </body>
+      </div> -->
+  <script src="./renderer.js"></script>
+</body>
 
-  <!-- import Vue before Element -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- import JavaScript -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      data() {
-        return {
-          activeIndex: '1',
-          activeIndex2: '1'
-        };
-      },
-      methods: {
-        handleSelect(key, keyPath) {
-          console.log(key, keyPath);
-        }
-      }
-    })
-    
-  </script>
+
 
 </html>

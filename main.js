@@ -2,9 +2,10 @@
 const { app, BrowserWindow, Menu, Tray, Notification } = require('electron')
 const path = require('path')
 const http = require('http')
-const express_server = require('./express_server')
-const Store = require('./utils/Store')
+const {express_server, setShareFilePath} = require('./express_server')
+const { ipcMain,dialog } = require('electron')
 
+const Store = require('./utils/Store')
 // 全局变量
 let mainTray; // 托盘
 let mainWindow;
@@ -67,6 +68,14 @@ app.whenReady()
   .then(() => {
     mainWindow = createWindow()
     mainTray = createTray(mainWindow)
+
+    // 对话框: 选择文件,返回路径
+    ipcMain.on('asynchronous-message', (event, arg) => {
+      const shareFilePath = dialog.showOpenDialogSync({})
+      setShareFilePath(shareFilePath)
+      event.reply('asynchronous-reply', shareFilePath)
+    })
+
   })
   .then(() => {
     // 通知: 程序已开启

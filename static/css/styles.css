@@ -26,3 +26,27 @@
 .show {
     display: block;
 }
+
+.send-card {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 2em;
+    align-items: center;
+}
+
+.normal-btn {
+    width: 10em;
+}
+
+.receive-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.send-content {
+    display: flex;
+    justify-content: space-evenly;
+
+}
