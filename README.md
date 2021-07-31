@@ -1,24 +1,28 @@
 #### Transfer Photos from iOS to Win on one click
 
-##### Features
+##### iOS -> Win
 
 ![一键从ios发文件到win10](README.assets/一键从ios发文件到win10.gif)
 
-* iOS clipboard  -->  Windows clipboard
-* iOS photo --> Windows folder
-* [Video demo](https://youtu.be/UPjAv-dKj6A)
+* [Youtube](https://youtu.be/UPjAv-dKj6A)
+
+
+
+Win -> iOS
+
+![121](README.assets/121.gif)
 
 
 
 ##### How it work
 
-​	Use express create a local http sever in your computer, so your can send photos from your iPhone to computer with a POST request.
+​	Http sever on PC
 
 
 
-##### Install
+##### How to use
 
-* [windows setup](https://github.com/arnosolo/send_ios_photos_to_win/releases)
+​	Install [windows release](https://github.com/arnosolo/send_ios_photos_to_win/releases), follow the guide.
 
 
 
